@@ -11,6 +11,7 @@
 #include <iostream>
 
 namespace solarSystem {
+namespace window {
 
 class Window {
 
@@ -32,6 +33,7 @@ class Window {
 
 };
 
-}//solarSystem
+} //window
+} //solarSystem
 
 #endif //FINDBALL_WINDOW_H

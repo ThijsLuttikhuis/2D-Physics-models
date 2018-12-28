@@ -150,6 +150,33 @@ src/solar_system_simulator.cpp.s:
 	$(MAKE) -f CMakeFiles/SolarSystem.dir/build.make CMakeFiles/SolarSystem.dir/src/solar_system_simulator.cpp.s
 .PHONY : src/solar_system_simulator.cpp.s
 
+src/window/Drawer.o: src/window/Drawer.cpp.o
+
+.PHONY : src/window/Drawer.o
+
+# target to build an object file
+src/window/Drawer.cpp.o:
+	$(MAKE) -f CMakeFiles/SolarSystem.dir/build.make CMakeFiles/SolarSystem.dir/src/window/Drawer.cpp.o
+.PHONY : src/window/Drawer.cpp.o
+
+src/window/Drawer.i: src/window/Drawer.cpp.i
+
+.PHONY : src/window/Drawer.i
+
+# target to preprocess a source file
+src/window/Drawer.cpp.i:
+	$(MAKE) -f CMakeFiles/SolarSystem.dir/build.make CMakeFiles/SolarSystem.dir/src/window/Drawer.cpp.i
+.PHONY : src/window/Drawer.cpp.i
+
+src/window/Drawer.s: src/window/Drawer.cpp.s
+
+.PHONY : src/window/Drawer.s
+
+# target to generate assembly for a file
+src/window/Drawer.cpp.s:
+	$(MAKE) -f CMakeFiles/SolarSystem.dir/build.make CMakeFiles/SolarSystem.dir/src/window/Drawer.cpp.s
+.PHONY : src/window/Drawer.cpp.s
+
 src/window/Window.o: src/window/Window.cpp.o
 
 .PHONY : src/window/Window.o
@@ -189,6 +216,9 @@ help:
 	@echo "... src/solar_system_simulator.o"
 	@echo "... src/solar_system_simulator.i"
 	@echo "... src/solar_system_simulator.s"
+	@echo "... src/window/Drawer.o"
+	@echo "... src/window/Drawer.i"
+	@echo "... src/window/Drawer.s"
 	@echo "... src/window/Window.o"
 	@echo "... src/window/Window.i"
 	@echo "... src/window/Window.s"

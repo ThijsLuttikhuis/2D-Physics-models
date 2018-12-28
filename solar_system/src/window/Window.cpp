@@ -5,6 +5,7 @@
 #include "Window.h"
 
 namespace solarSystem {
+namespace window {
 
 int Window::pixelWidth;
 int Window::pixelHeight;
@@ -51,4 +52,5 @@ void Window::updateWindow() {
     cv::waitKey(1);
 }
 
-}
+} //window
+} //solarSystem
