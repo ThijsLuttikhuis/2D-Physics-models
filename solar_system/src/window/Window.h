@@ -2,8 +2,8 @@
 // Created by thijs on 27-12-18.
 //
 
-#ifndef FINDBALL_WINDOW_H
-#define FINDBALL_WINDOW_H
+#ifndef SOLARSYSTEM_WINDOW_H
+#define SOLARSYSTEM_WINDOW_H
 
 #include <opencv2/imgcodecs.hpp>
 #include <opencv2/highgui.hpp>

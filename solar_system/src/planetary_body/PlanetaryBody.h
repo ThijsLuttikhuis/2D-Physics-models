@@ -2,6 +2,9 @@
 // Created by thijs on 27-12-18.
 //
 
+#ifndef SOLARSYSTEM_PLANETARYBODY_H
+#define SOLARSYSTEM_PLANETARYBODY_H
+
 #include <opencv2/imgcodecs.hpp>
 #include <opencv2/highgui.hpp>
 #include <opencv2/imgproc.hpp>
@@ -9,8 +12,6 @@
 #include <string>
 #include <memory>
 
-#ifndef SOLARSYSTEM_PLANETARYBODY_H
-#define SOLARSYSTEM_PLANETARYBODY_H
 
 namespace solarSystem {
 namespace planetaryBody {
