@@ -75,8 +75,6 @@ std::vector<bodyPtr> initPlanetaryBodies() {
         planetaryBodies.push_back(pointer);
     }
 
-    // _________________________________________________________________________________________________________________
-
     solarSystem::window::Window::resizeWindow(planetaryBodies);
 
     return planetaryBodies;
@@ -101,6 +99,10 @@ void windowThread(const short &xPixels, const short &yPixels) {
     glfwMakeContextCurrent(window);
 
     while (!solarSystem::planetaryBody::PlanetData::getExit()) {
+        if (glfwWindowShouldClose(window)) {
+            solarSystem::planetaryBody::PlanetData::setExit();
+            break;
+        }
         solarSystem::window::Window::resetWindow();
         planetaryBodies = solarSystem::planetaryBody::PlanetData::getPlanetaryBodies();
 
@@ -147,17 +149,11 @@ int main() {
     solarSystem::planetaryBody::PlanetData::setPlanetaryBodies(planetaryBodies);
 
     const double dt = 10;
-    const short xPixels = 1800;
-    const short yPixels = 600;
+    const short xPixels = 1600;
+    const short yPixels = 900;
 
     std::thread t1(windowThread, xPixels, yPixels);
     std::thread t2(updateBodies, dt);
-
-//    while (true) {
-//        if (solarSystem::planetaryBody::PlanetData::getExit()) {
-//            break;
-//        }
-//    }
 
     t1.join();
     t2.join();
