@@ -5,33 +5,37 @@
 #ifndef SOLARSYSTEM_DRAWER_H
 #define SOLARSYSTEM_DRAWER_H
 
-#include <opencv2/imgcodecs.hpp>
-#include <opencv2/highgui.hpp>
-#include <opencv2/imgproc.hpp>
+
 #include <iostream>
 #include "Window.h"
-#include "../planetary_body/PlanetaryBody.h"
 #include <memory>
+#include <cmath>
 
 namespace solarSystem {
+
+#define BLACK Color({0,0,0,0});
+
+namespace planetaryBody {
+class PlanetaryBody;
+class Vector2;
+class Vector2int;
+}
+
+
 namespace window {
+class Color;
 
 class Drawer {
-
-    private:
-        using Vector2 = planetaryBody::PlanetaryBody::Vector2;
-        using Vector2int = planetaryBody::PlanetaryBody::Vector2int;
-        static double pixelToReal;
-        static double realToPixel;
-        static double xPixelCenter;
-        static double yPixelCenter;
+        using Vector2 = planetaryBody::Vector2;
+        using Vector2int = planetaryBody::Vector2int;
     public:
 
-        static void drawCircle(const int &xCenter, const int &yCenter, double radius,
-                const cv::Vec3b &color);
+
+        static void drawCircle(const short &xCenter, const short &yCenter, double radius,
+                Color* color);
 
         static void drawCircle(const double &xCenter, const double &yCenter, double innerRadius, double outerRadius,
-                const cv::Vec3b &color);
+                Color* color);
 
         static void drawPlanetaryBody(const std::shared_ptr<planetaryBody::PlanetaryBody> &body);
         static void setPixelToReal(const double &factor);
@@ -42,6 +46,13 @@ class Drawer {
         static void setRealCenter(const Vector2 &pos);
         static void setPixelCenter(const int &x, const int &y);
         static void setPixelCenter(const Vector2int &pos);
+
+    private:
+        static double pixelToReal;
+        static double realToPixel;
+        static double xPixelCenter;
+        static double yPixelCenter;
+
 };
 
 } //window

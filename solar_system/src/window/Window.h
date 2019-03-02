@@ -5,36 +5,41 @@
 #ifndef SOLARSYSTEM_WINDOW_H
 #define SOLARSYSTEM_WINDOW_H
 
-#include <opencv2/imgcodecs.hpp>
-#include <opencv2/highgui.hpp>
-#include <opencv2/imgproc.hpp>
 #include <iostream>
-#include "../planetary_body/PlanetaryBody.h"
+#include <vector>
+#include <memory>
 
 namespace solarSystem {
+
+namespace planetaryBody {
+class PlanetaryBody;
+}
+
 namespace window {
+
+class Color;
 
 class Window {
 
     private:
-        static int xPixels;
-        static int yPixels;
-        static cv::Mat image;
+        static short width;
+        static short height;
+        static unsigned char* image;
 
     public:
 
-        static cv::Mat getImage();
+        static unsigned char* getImage();
 
-        static int getXPixels();
-        static int getYPixels();
+        static short getWidth();
+        static short getHeight();
 
-        static cv::Vec3b getPixel(const int &x, const int &y);
+        static unsigned char* getPixel(const int &x, const int &y);
 
-        static void setImage(cv::Mat &newImage);
-        static void setPixel(const int &x, const int &y, const cv::Vec3b &color);
+        static void setImage(unsigned char* image);
+        static void setPixel(const short &x, const short &y, Color* color);
 
         static void initializeWindow();
-        static void initializeWindow(const int &width, const int &height);
+        static void initializeWindow(const short &width, const short &height);
         static void resetWindow();
         static void resizeWindow(std::vector<std::shared_ptr<planetaryBody::PlanetaryBody>> bodies, std::string focus, double radius);
         static void resizeWindow(std::vector<std::shared_ptr<planetaryBody::PlanetaryBody>> bodies);

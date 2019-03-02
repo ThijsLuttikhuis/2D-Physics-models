@@ -23,9 +23,12 @@ void PlanetData::setPlanetaryBodies(std::vector<bodyPtr> &bodies) {
 std::vector<PlanetData::bodyPtr> PlanetData::getPlanetaryBodies() {
     mutex.lock();
     std::vector<bodyPtr> bodies;
+
+    bodies.reserve(planetaryBodies.size());
     for (auto &body : planetaryBodies) {
         bodies.push_back(body);
     }
+
     mutex.unlock();
     return bodies;
 }

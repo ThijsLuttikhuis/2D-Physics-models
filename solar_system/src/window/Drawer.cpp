@@ -3,6 +3,10 @@
 //
 
 #include "Drawer.h"
+#include "../planetary_body/PlanetaryBody.h"
+#include "Color.h"
+#include "../planetary_body/Vector2Int.h"
+#include "../planetary_body/Vector2.h"
 
 namespace solarSystem {
 namespace window {
@@ -12,10 +16,11 @@ double Drawer::realToPixel;
 double Drawer::xPixelCenter;
 double Drawer::yPixelCenter;
 
-void Drawer::drawCircle(const int &xCenter, const int &yCenter, double radius, const cv::Vec3b &color) {
-
-    int pixels = Window::getXPixels() > Window::getYPixels() ? Window::getYPixels() : Window::getXPixels();
-    if (xCenter < 0 || xCenter > Window::getXPixels() || yCenter < 0 || yCenter > Window::getYPixels()) return;
+void Drawer::drawCircle(const short &xCenter, const short &yCenter, double radius, Color *color) {
+    auto width = Window::getWidth();
+    auto height = Window::getHeight();
+    int pixels = width > height ? height : width;
+    if (xCenter < 0 || xCenter > width || yCenter < 0 || yCenter > height) return;
     if (radius < 4.0 || radius < pixels*0.005) {
         double inner = pixels*0.010;
         double outer = (pixels*0.002 > 1.0 ? pixels*0.012 : pixels*0.010 + 1.0) ;
@@ -34,12 +39,12 @@ void Drawer::drawCircle(const int &xCenter, const int &yCenter, double radius, c
 }
 
 void Drawer::drawCircle(const double &xCenter, const double &yCenter, double innerRadius, double outerRadius,
-        const cv::Vec3b &color) {
+        Color* color) {
 
     double outerRadiusSquared = outerRadius*outerRadius;
     double innerRadiusSquared = innerRadius*innerRadius;
-    for (int x = static_cast<int>(round(xCenter - outerRadius)); x < round(xCenter + outerRadius); x ++) {
-        for (int y = static_cast<int>(round(yCenter - outerRadius)); y < round(yCenter + outerRadius); y ++) {
+    for (auto x = static_cast<short>(round(xCenter - outerRadius)); x < round(xCenter + outerRadius); x ++) {
+        for (auto y = static_cast<short>(round(yCenter - outerRadius)); y < round(yCenter + outerRadius); y ++) {
             double dx = x - xCenter;
             double dy = y - yCenter;
             if (dx*dx + dy*dy < outerRadiusSquared && dx*dx + dy*dy > innerRadiusSquared) {
@@ -50,13 +55,13 @@ void Drawer::drawCircle(const double &xCenter, const double &yCenter, double inn
 }
 
 void Drawer::drawPlanetaryBody(const std::shared_ptr<planetaryBody::PlanetaryBody> &body) {
-    cv::Vec3b color = body->getColor();
+    Color* color = body->getColor();
     double r = body->getRadius()*realToPixel;
     Vector2int pos = transformRealToPixel(body->getPosition());
     drawCircle(pos.x, pos.y, r, color);
 }
 
-planetaryBody::PlanetaryBody::Vector2int Drawer::transformRealToPixel(const Vector2 &pos) {
+planetaryBody::Vector2int Drawer::transformRealToPixel(const Vector2 &pos) {
     Vector2int pixelPos;
     pixelPos.x = static_cast<int>(round(pos.x*realToPixel - xPixelCenter));
     pixelPos.y = static_cast<int>(round(pos.y*realToPixel - yPixelCenter));
@@ -84,8 +89,8 @@ void Drawer::setPixelCenter(const int &x, const int &y) {
 }
 
 void Drawer::setRealCenter(const Vector2 &pos) {
-    Vector2int pixel = {static_cast<int>(pos.x*realToPixel) - Window::getXPixels()/2,
-                        static_cast<int>(pos.y*realToPixel) - Window::getYPixels()/2};
+    Vector2int pixel = {static_cast<int>(pos.x*realToPixel) - Window::getWidth()/2,
+                        static_cast<int>(pos.y*realToPixel) - Window::getHeight()/2};
     setPixelCenter(pixel);
 }
 

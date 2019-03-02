@@ -4,86 +4,84 @@
 
 #include "Window.h"
 #include "Drawer.h"
+#include "Color.h"
+#include "../planetary_body/Vector2.h"
+#include "../planetary_body/Vector2Int.h"
+#include "../planetary_body/PlanetaryBody.h"
 
 namespace solarSystem {
 namespace window {
 
-int Window::xPixels;
-int Window::yPixels;
-cv::Mat Window::image;
+short Window::width;
+short Window::height;
+unsigned char* Window::image;
 
-cv::Mat Window::getImage() {
+unsigned char* Window::getImage() {
     return image;
 }
 
-int Window::getXPixels() {
-    return xPixels;
+short Window::getWidth() {
+    return width;
 }
 
-int Window::getYPixels() {
-    return yPixels;
+short Window::getHeight() {
+    return height;
 }
 
-cv::Vec3b Window::getPixel(const int &x, const int &y) {
-    if (x >= 0 && y >= 0 && x < xPixels && y < yPixels) {
-        return image.at<cv::Vec3b>(y, x);
+unsigned char* Window::getPixel(const int &x, const int &y) {
+    if (x > 0 && y > 0 && x < width-1 && y < height-1) {
+        int index = x + y * width;
+        return (image + index * 4);
     }
-    else {
-        //std::cout << "ERROR: pixel is not within margins." << std::endl;
-        return {};
-    }
+    return image;
 }
 
-void Window::setImage(cv::Mat &newImage) {
-    image = newImage;
+void Window::setImage(unsigned char* image) {
+    Window::image = image;
 }
 
-void Window::setPixel(const int &x, const int &y, const cv::Vec3b &color) {
-    if (x >= 0 && y >= 0 && x < xPixels && y < yPixels) {
-        image.at<cv::Vec3b>(y, x) = color;
-    }
-    else {
-        //std::cout << "ERROR: pixel is not within margins." << std::endl;
+void Window::setPixel(const short &x, const short &y, Color* color) {
+    if (x > 0 && y > 0 && x < width - 1 && y < height - 1) {
+        int index = x + y*width;
+        *(image + index*4 + 0) = color->red;
+        *(image + index*4 + 1) = color->green;
+        *(image + index*4 + 2) = color->blue;
+        *(image + index*4 + 3) = color->alpha;
     }
 }
 
 void Window::initializeWindow() {
-    xPixels = 1366;
-    yPixels = 768;
-    image = cv::Mat(yPixels, xPixels, CV_8UC3);
-
-    cv::namedWindow("Window", CV_WINDOW_NORMAL);
+    width = 1366;
+    height = 768;
+    image = new unsigned char [width*height*4];
 }
 
-void Window::initializeWindow(const int &width, const int &height) {
-    xPixels = width;
-    yPixels = height;
-    image = cv::Mat(yPixels, xPixels, CV_8UC3);
-
-    cv::namedWindow("Window", CV_WINDOW_NORMAL);
+void Window::initializeWindow(const short &width, const short &height) {
+    Window::width = width;
+    Window::height = height;
+    image = new unsigned char [width*height*4];
 }
 
 void Window::updateWindow() {
-
-    cv::imshow("Window", image);
-    cv::waitKey(1);
+    //TODO: update
 }
 
 
 void Window::resetWindow() {
-    image = cv::Mat::zeros(yPixels, xPixels, CV_8UC3);
-
+    delete[] image;
+    image = nullptr;
+    image = new unsigned char [width*height*4];
 }
 
 void Window::resizeWindow(std::vector<std::shared_ptr<planetaryBody::PlanetaryBody>> bodies) {
-    planetaryBody::PlanetaryBody::Vector2 centerOfMass = bodies.front()->getCenterOfMass(bodies);
+    planetaryBody::Vector2 centerOfMass = bodies.front()->getCenterOfMass(bodies);
     double furthestDistance = bodies.front()->getFurthestObject(bodies, centerOfMass);
 
     double factor;
-    if (getXPixels() < getYPixels())
-        factor = 0.45 * getXPixels()/furthestDistance;
+    if (width < height)
+        factor = 0.45 * width/furthestDistance;
     else
-        factor = 0.45 * getYPixels()/furthestDistance;
+        factor = 0.45 * height/furthestDistance;
 
     Drawer::setRealToPixel(factor);
     Drawer::setRealCenter(centerOfMass);
@@ -92,7 +90,7 @@ void Window::resizeWindow(std::vector<std::shared_ptr<planetaryBody::PlanetaryBo
 void Window::resizeWindow(std::vector<std::shared_ptr<planetaryBody::PlanetaryBody>> bodies, std::string focus,
         double radius) {
 
-    planetaryBody::PlanetaryBody::Vector2 focusPos = {0,0};
+    planetaryBody::Vector2 focusPos = {0,0};
     for (auto &body : bodies) {
         if (body.get()->getName() == focus) {
             focusPos = body->getPosition();
@@ -100,10 +98,10 @@ void Window::resizeWindow(std::vector<std::shared_ptr<planetaryBody::PlanetaryBo
         }
     }
     double factor;
-    if (getXPixels() < getYPixels())
-        factor = 0.45 * getXPixels()/radius;
+    if (width < height)
+        factor = 0.45 * width/radius;
     else
-        factor = 0.45 * getYPixels()/radius;
+        factor = 0.45 * height/radius;
 
     Drawer::setRealToPixel(factor);
     Drawer::setRealCenter(focusPos);

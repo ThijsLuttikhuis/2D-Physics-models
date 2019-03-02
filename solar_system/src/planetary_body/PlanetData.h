@@ -5,14 +5,14 @@
 #ifndef SOLARSYSTEM_PLANETDATA_H
 #define SOLARSYSTEM_PLANETDATA_H
 
-#include "PlanetaryBody.h"
 #include <thread>
 #include <mutex>
 #include <vector>
 
-
 namespace solarSystem {
 namespace planetaryBody {
+
+class PlanetaryBody;
 
 class PlanetData {
 
