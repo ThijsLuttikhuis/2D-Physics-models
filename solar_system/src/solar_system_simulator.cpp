@@ -2,6 +2,7 @@
 // Created by thijs on 27-12-18.
 //
 
+#include <random>
 #include <memory>
 #include <thread>
 #include "planetary_body/PlanetaryBody.h"
@@ -33,50 +34,85 @@ class Drawer;
 
 using bodyPtr = std::shared_ptr<solarSystem::planetaryBody::PlanetaryBody>;
 
-std::vector<bodyPtr> initPlanetaryBodies() {
-    const unsigned int NBODIES = 3;
-
+std::vector<bodyPtr> initPlanetaryBodies(int what = 0) {
     std::vector<bodyPtr> planetaryBodies;
-    planetaryBodies.reserve(NBODIES);
+    unsigned int NBODIES;
+    std::vector<std::string> bodyNames;
+    std::vector<double> bodyMasses;
+    std::vector<double> bodyRadii;
+    std::vector<solarSystem::planetaryBody::Vector2> bodyPositions;
+    std::vector<solarSystem::planetaryBody::Vector2> bodyVelocities;
+    auto* bodyColors = new solarSystem::window::Color[100];
 
-    std::string bodyNames[] = {"Earth",
-                               "Sun",
-                               "Moon"};
+    switch (what) {
+    case 1:
+        NBODIES = 20;
+        planetaryBodies.reserve(NBODIES);
 
-    double bodyMasses[] = {5.972e24,
-                           1.988e30,
-                           7.346e22};
+        for (unsigned int i = 0; i < NBODIES; i++) {
 
-    double bodyRadii[] = {6.371e6,
-                          6.957e9,
-                          1.738e6};
+            bodyNames.push_back(static_cast<std::string>("random"));
+            bodyMasses.push_back(std::rand()*std::rand() * 1e29);
+            bodyRadii.push_back(std::rand() * 1e5);
 
-    solarSystem::planetaryBody::Vector2 bodyPositions[] = {
-            {0, 1.496e11},
-            {0, 0},
-            {3.844e8, 1.496e11}};
+            solarSystem::planetaryBody::Vector2 pos;
+            pos.x = std::rand() * 1e6;
+            pos.y = std::rand() * 1e6;
+            bodyPositions.push_back(pos);
 
-    solarSystem::planetaryBody::Vector2 bodyVelocities[] = {
-            {- 2.978e4, 0},
-            {0, 0},
-            {- 2.978e4, 1.0e3}};
+            solarSystem::planetaryBody::Vector2 vel;
+            vel.x = std::rand() * -1e-2;
+            vel.y = std::rand() * 1e-2;
+            bodyVelocities.push_back(vel);
 
-    auto* bodyColors = new solarSystem::window::Color[NBODIES];
-    bodyColors[0] = solarSystem::window::Color(0, 127, 191, 255);
-    bodyColors[1] = solarSystem::window::Color(191, 191, 0, 255);
-    bodyColors[2] = solarSystem::window::Color(63, 127, 127, 255);
+            bodyColors[i] = solarSystem::window::Color(static_cast<unsigned char>(std::rand()),
+                    static_cast<unsigned char>(std::rand()),
+                    static_cast<unsigned char>(std::rand()),
+                    static_cast<unsigned char>(std::rand()));
+        }
+        break;
+    case 0:
+    default:
+        NBODIES = 3;
+        planetaryBodies.reserve(NBODIES);
 
-    for (unsigned int i = 0; i < NBODIES; i ++) {
-        solarSystem::planetaryBody::PlanetaryBody earth = solarSystem::planetaryBody::PlanetaryBody
+        bodyNames = {"Earth",
+                     "Sun",
+                     "Moon"};
+
+        bodyMasses = {5.972e24,
+                      1.988e30,
+                      7.346e22};
+
+        bodyRadii = {6.371e6,
+                     6.957e9,
+                     1.738e6};
+
+        bodyPositions = {
+                {0, 1.496e11},
+                {0, 0},
+                {3.844e8, 1.496e11}};
+
+        bodyVelocities = {
+                {- 2.978e4, 0},
+                {0, 0},
+                {- 2.978e4, 1.0e3}};
+
+        bodyColors[0] = solarSystem::window::Color(0, 127, 191, 255);
+        bodyColors[1] = solarSystem::window::Color(191, 191, 0, 255);
+        bodyColors[2] = solarSystem::window::Color(63, 127, 127, 255);
+        break;
+    }
+
+    for (int i = 0; i < NBODIES; i ++) {
+        solarSystem::planetaryBody::PlanetaryBody body = solarSystem::planetaryBody::PlanetaryBody
                 (bodyNames[i], bodyMasses[i], bodyRadii[i], bodyPositions[i],
                         bodyVelocities[i], (bodyColors + i));
 
-        bodyPtr pointer = std::make_shared<solarSystem::planetaryBody::PlanetaryBody>(earth);
+        bodyPtr pointer = std::make_shared<solarSystem::planetaryBody::PlanetaryBody>(body);
         planetaryBodies.push_back(pointer);
     }
-
     solarSystem::window::Window::resizeWindow(planetaryBodies);
-
     return planetaryBodies;
 }
 
@@ -101,11 +137,23 @@ void windowThread(const short &xPixels, const short &yPixels) {
     planetaryBodies = solarSystem::planetaryBody::PlanetData::getPlanetaryBodies();
     solarSystem::window::Window::resizeWindow(planetaryBodies);
 
-    bool period = false;
-    bool comma = false;
-    bool tab = false;
-    bool minus = false;
-    bool equal = false;
+    bool key_period = false;
+    bool key_comma = false;
+    bool key_tab = false;
+    bool key_minus = false;
+    bool key_equal = false;
+
+    bool key_0 = false;
+    bool key_1 = false;
+    bool key_2 = false;
+    bool key_3 = false;
+    bool key_4 = false;
+    bool key_5 = false;
+    bool key_6 = false;
+    bool key_7 = false;
+    bool key_8 = false;
+    bool key_9 = false;
+
 
     while (!solarSystem::planetaryBody::PlanetData::getExit()) {
         if (glfwWindowShouldClose(window)) {
@@ -140,54 +188,116 @@ void windowThread(const short &xPixels, const short &yPixels) {
             break;
         }
 
-        if (glfwGetKey(window, GLFW_KEY_PERIOD) == GLFW_PRESS && !period) {
-            period = true;
+        if (glfwGetKey(window, GLFW_KEY_PERIOD) == GLFW_PRESS && !key_period) {
+            key_period = true;
 
             double dt = solarSystem::planetaryBody::PlanetData::getDt()*2.0;
             solarSystem::planetaryBody::PlanetData::setDt(dt);
 
         }
-        if (glfwGetKey(window, GLFW_KEY_COMMA) == GLFW_PRESS && !comma) {
-            comma = true;
+        if (glfwGetKey(window, GLFW_KEY_COMMA) == GLFW_PRESS && !key_comma) {
+            key_comma = true;
 
             double dt = solarSystem::planetaryBody::PlanetData::getDt()*0.5;
             solarSystem::planetaryBody::PlanetData::setDt(dt);
 
         }
-        if (glfwGetKey(window, GLFW_KEY_TAB) == GLFW_PRESS && !tab) {
-            tab = true;
+        if (glfwGetKey(window, GLFW_KEY_TAB) == GLFW_PRESS && !key_tab) {
+            key_tab = true;
 
             if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
                 solarSystem::window::Window::resizeWindow(planetaryBodies, -3, -1.0);
             else
                 solarSystem::window::Window::resizeWindow(planetaryBodies, -2, -1.0);
         }
-        if (glfwGetKey(window, GLFW_KEY_EQUAL) == GLFW_PRESS && !equal) {
-            equal = true;
+        if (glfwGetKey(window, GLFW_KEY_EQUAL) == GLFW_PRESS && !key_equal) {
+            key_equal = true;
 
             solarSystem::window::Window::resizeWindow(planetaryBodies, -4, -0.75);
         }
-        if (glfwGetKey(window, GLFW_KEY_MINUS) == GLFW_PRESS && !minus) {
-            minus = true;
+        if (glfwGetKey(window, GLFW_KEY_MINUS) == GLFW_PRESS && !key_minus) {
+            key_minus = true;
 
             solarSystem::window::Window::resizeWindow(planetaryBodies, -4, -1.33);
         }
 
 
+        if (glfwGetKey(window, GLFW_KEY_BACKSLASH) == GLFW_PRESS) {
+
+            if (glfwGetKey(window, GLFW_KEY_0) == GLFW_PRESS && !key_0) {
+                key_0 = true;
+
+                auto newBodies = initPlanetaryBodies(0);
+                solarSystem::planetaryBody::PlanetData::setPlanetaryBodies(newBodies);
+                solarSystem::window::Window::resizeWindow(planetaryBodies);
+            }
+            if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS && !key_1) {
+                key_1 = true;
+
+                auto newBodies = initPlanetaryBodies(1);
+                solarSystem::planetaryBody::PlanetData::setPlanetaryBodies(newBodies);
+                solarSystem::window::Window::resizeWindow(planetaryBodies);
+            }
+            if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS && !key_2) {
+                key_2 = true;
+
+                auto newBodies = initPlanetaryBodies(2);
+                solarSystem::planetaryBody::PlanetData::setPlanetaryBodies(newBodies);
+                solarSystem::window::Window::resizeWindow(planetaryBodies);
+            }
+            if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS && !key_3) {
+                key_3 = true;
+
+                auto newBodies = initPlanetaryBodies(3);
+                solarSystem::planetaryBody::PlanetData::setPlanetaryBodies(newBodies);
+                solarSystem::window::Window::resizeWindow(planetaryBodies);
+            }
+            if (glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS && !key_4) {
+                key_4 = true;
+
+                auto newBodies = initPlanetaryBodies(4);
+                solarSystem::planetaryBody::PlanetData::setPlanetaryBodies(newBodies);
+                solarSystem::window::Window::resizeWindow(planetaryBodies);
+            }
+
+
+            if (glfwGetKey(window, GLFW_KEY_0) == GLFW_RELEASE) {
+                key_0 = false;
+            }
+            if (glfwGetKey(window, GLFW_KEY_1) == GLFW_RELEASE) {
+                key_1 = false;
+            }
+            if (glfwGetKey(window, GLFW_KEY_2) == GLFW_RELEASE) {
+                key_2 = false;
+            }
+            if (glfwGetKey(window, GLFW_KEY_3) == GLFW_RELEASE) {
+                key_3 = false;
+            }
+            if (glfwGetKey(window, GLFW_KEY_4) == GLFW_RELEASE) {
+                key_4 = false;
+            }
+
+        }
+
+
+
+
+
+
         if (glfwGetKey(window, GLFW_KEY_PERIOD) == GLFW_RELEASE) {
-            period = false;
+            key_period = false;
         }
         if (glfwGetKey(window, GLFW_KEY_COMMA) == GLFW_RELEASE) {
-            comma = false;
+            key_comma = false;
         }
         if (glfwGetKey(window, GLFW_KEY_TAB) == GLFW_RELEASE) {
-            tab = false;
+            key_tab = false;
         }
         if (glfwGetKey(window, GLFW_KEY_EQUAL) == GLFW_RELEASE) {
-            equal = false;
+            key_equal = false;
         }
         if (glfwGetKey(window, GLFW_KEY_MINUS) == GLFW_RELEASE) {
-            minus = false;
+            key_minus = false;
         }
     }
 
@@ -198,7 +308,6 @@ void updateBodies() {
 
     while (!solarSystem::planetaryBody::PlanetData::getExit()) {
         double dt = solarSystem::planetaryBody::PlanetData::getDt();
-
 
         planetaryBodies = solarSystem::planetaryBody::PlanetData::getPlanetaryBodies();
         planetaryBodies.front()->updateForces(planetaryBodies);
