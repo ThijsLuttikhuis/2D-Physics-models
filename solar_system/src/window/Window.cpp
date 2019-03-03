@@ -15,6 +15,8 @@ namespace window {
 short Window::width;
 short Window::height;
 unsigned char* Window::image;
+int Window::focusBody = -1;
+
 
 unsigned char* Window::getImage() {
     return image;
@@ -77,6 +79,8 @@ void Window::resizeWindow(std::vector<std::shared_ptr<planetaryBody::PlanetaryBo
     planetaryBody::Vector2 centerOfMass = bodies.front()->getCenterOfMass(bodies);
     double furthestDistance = bodies.front()->getFurthestObject(bodies, centerOfMass);
 
+    focusBody = -1;
+
     double factor;
     if (width < height)
         factor = 0.45 * width/furthestDistance;
@@ -87,21 +91,49 @@ void Window::resizeWindow(std::vector<std::shared_ptr<planetaryBody::PlanetaryBo
     Drawer::setRealCenter(centerOfMass);
 }
 
-void Window::resizeWindow(std::vector<std::shared_ptr<planetaryBody::PlanetaryBody>> bodies, std::string focus,
+void Window::resizeWindow(std::vector<std::shared_ptr<planetaryBody::PlanetaryBody>> bodies, int focus,
         double radius) {
 
-    planetaryBody::Vector2 focusPos = {0,0};
-    for (auto &body : bodies) {
-        if (body.get()->getName() == focus) {
-            focusPos = body->getPosition();
-            break;
+    auto bodiesSize = static_cast<int>(bodies.size());
+
+    planetaryBody::Vector2 focusPos;
+    if (focus < 0) {
+        if (focus == -1 || focusBody == -1) {
+            if (focus != -1) {
+                focusBody = 0;
+                focusPos = bodies[focusBody]->getPosition();
+            }
+            else {
+                focusPos = {0, 0};
+                focusBody = - 1;
+            }
+        }
+        else {
+            if (focus == - 2)
+                focusBody = (focusBody < bodiesSize - 1 ? focusBody + 1 : 0);
+            else if (focus == - 3)
+                focusBody = (focusBody > 0 ? focusBody - 1 : bodiesSize - 1);
+
+            focusPos = bodies[focusBody]->getPosition();
         }
     }
+    else {
+        focus = focus < bodiesSize - 1 ? focus : bodiesSize - 1;
+        focusPos = bodies[focus]->getPosition();
+        focusBody = focus;
+    }
+
     double factor;
-    if (width < height)
-        factor = 0.45 * width/radius;
-    else
-        factor = 0.45 * height/radius;
+    if (radius < 0.0) {
+        factor = Drawer::getRealToPixel()*radius*-1;
+    }
+    else {
+        if (width < height)
+            factor = 0.45 * width/radius;
+        else
+            factor = 0.45 * height/radius;
+    }
+
 
     Drawer::setRealToPixel(factor);
     Drawer::setRealCenter(focusPos);

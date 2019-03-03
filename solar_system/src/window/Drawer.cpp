@@ -97,6 +97,18 @@ void Drawer::setRealCenter(const Vector2 &pos) {
 void Drawer::setPixelCenter(const Drawer::Vector2int &pos) {
     setPixelCenter(pos.x, pos.y);
 }
+double Drawer::getPixelToReal() {
+    return pixelToReal;
+}
+double Drawer::getRealToPixel() {
+    return realToPixel;
+}
+double Drawer::getXPixelCenter() {
+    return xPixelCenter;
+}
+double Drawer::getYPixelCenter() {
+    return yPixelCenter;
+}
 
 } //window
 } //solarSystem

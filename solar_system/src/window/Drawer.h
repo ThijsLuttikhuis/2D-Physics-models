@@ -49,6 +49,12 @@ class Drawer {
 
     private:
         static double pixelToReal;
+    public:
+        static double getPixelToReal();
+        static double getRealToPixel();
+        static double getXPixelCenter();
+        static double getYPixelCenter();
+    private:
         static double realToPixel;
         static double xPixelCenter;
         static double yPixelCenter;

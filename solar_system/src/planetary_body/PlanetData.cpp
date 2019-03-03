@@ -8,20 +8,23 @@ namespace solarSystem {
 namespace planetaryBody {
 
 std::vector<std::shared_ptr<PlanetaryBody>> PlanetData::planetaryBodies;
-std::mutex PlanetData::mutex;
 bool PlanetData::exit = false;
+double PlanetData::dt;
+
+std::mutex PlanetData::bodiesMutex;
+std::mutex PlanetData::dtMutex;
 
 void PlanetData::setPlanetaryBodies(std::vector<bodyPtr> &bodies) {
-    mutex.lock();
+    bodiesMutex.lock();
     planetaryBodies.clear();
     for (auto &body : bodies) {
         planetaryBodies.push_back(body);
     }
-    mutex.unlock();
+    bodiesMutex.unlock();
 }
 
 std::vector<PlanetData::bodyPtr> PlanetData::getPlanetaryBodies() {
-    mutex.lock();
+    bodiesMutex.lock();
     std::vector<bodyPtr> bodies;
 
     bodies.reserve(planetaryBodies.size());
@@ -29,8 +32,21 @@ std::vector<PlanetData::bodyPtr> PlanetData::getPlanetaryBodies() {
         bodies.push_back(body);
     }
 
-    mutex.unlock();
+    bodiesMutex.unlock();
     return bodies;
+}
+
+double PlanetData::getDt() {
+    dtMutex.lock();
+    double dt = PlanetData::dt;
+    dtMutex.unlock();
+    return dt;
+}
+
+void PlanetData::setDt(double &dt) {
+    dtMutex.lock();
+    PlanetData::dt = dt;
+    dtMutex.unlock();
 }
 
 } //planetaryBody

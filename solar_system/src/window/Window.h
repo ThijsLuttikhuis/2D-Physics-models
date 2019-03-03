@@ -25,6 +25,7 @@ class Window {
         static short width;
         static short height;
         static unsigned char* image;
+        static int focusBody;
 
     public:
 
@@ -41,7 +42,7 @@ class Window {
         static void initializeWindow();
         static void initializeWindow(const short &width, const short &height);
         static void resetWindow();
-        static void resizeWindow(std::vector<std::shared_ptr<planetaryBody::PlanetaryBody>> bodies, std::string focus, double radius);
+        static void resizeWindow(std::vector<std::shared_ptr<planetaryBody::PlanetaryBody>> bodies, int focus, double radius);
         static void resizeWindow(std::vector<std::shared_ptr<planetaryBody::PlanetaryBody>> bodies);
         static void updateWindow();
 
