@@ -10,17 +10,28 @@ namespace planetaryBody {
 std::vector<std::shared_ptr<PlanetaryBody>> PlanetData::planetaryBodies;
 bool PlanetData::exit = false;
 double PlanetData::dt;
+bool PlanetData::bodiesChanged = false;
 
 std::mutex PlanetData::bodiesMutex;
 std::mutex PlanetData::dtMutex;
 
-void PlanetData::setPlanetaryBodies(std::vector<bodyPtr> &bodies) {
+bool PlanetData::setPlanetaryBodies(std::vector<bodyPtr> &bodies, bool change) {
+
+    if (change) {
+        bodiesChanged = true;
+    }
+    else if (bodiesChanged) {
+        bodiesChanged = false;
+        return false;
+    }
     bodiesMutex.lock();
     planetaryBodies.clear();
     for (auto &body : bodies) {
         planetaryBodies.push_back(body);
     }
+
     bodiesMutex.unlock();
+    return true;
 }
 
 std::vector<PlanetData::bodyPtr> PlanetData::getPlanetaryBodies() {

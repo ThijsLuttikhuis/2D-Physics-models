@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.6)
 project( SolarSystem )
 
 set(CMAKE_CXX_FLAGS_RELEASE "-O1 -g0 -Werror -std=c++11 -pthread")
-set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g3 -Wall -Wextra -std=c++11 -pthread")
+set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g3 -Wall -std=c++11 -pthread")
 
 find_package(OpenGL REQUIRED)
 find_package(Threads REQUIRED)

@@ -95,6 +95,7 @@ void PlanetaryBody::updateForces(std::vector<bodyPtr> &bodies) {
             double dist = sqrt(r.x*r.x + r.y*r.y);
             double gmmDivDist =
                     second->get()->getG()*second->get()->getMass()*first->get()->getMass()/(dist*dist);
+
             Vector2 f = {gmmDivDist*r.x/dist, gmmDivDist*r.y/dist};
 
             Vector2 secondForce = {second->get()->getForce().x - f.x, second->get()->getForce().y - f.y};

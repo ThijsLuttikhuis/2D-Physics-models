@@ -22,13 +22,14 @@ class PlanetData {
         static std::vector<bodyPtr> planetaryBodies;
         static bool exit;
         static double dt;
+        static bool bodiesChanged;
 
         static std::mutex bodiesMutex;
         static std::mutex dtMutex;
     public:
 
         static std::vector<bodyPtr> getPlanetaryBodies();
-        static void setPlanetaryBodies(std::vector<bodyPtr> &bodies);
+        static bool setPlanetaryBodies(std::vector<bodyPtr> &bodies, bool change = false);
 
         static double getDt();
         static void setDt(double &dt);
