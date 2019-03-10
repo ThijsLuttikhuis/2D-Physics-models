@@ -3,12 +3,11 @@
 //
 
 #include "Drawer.h"
-#include "../planetary_body/PlanetaryBody.h"
+#include "../physics_object/GravityObject.h"
 #include "Color.h"
-#include "../planetary_body/Vector2Int.h"
-#include "../planetary_body/Vector2.h"
+#include "../physics_object/Vector2Int.h"
+#include "../physics_object/Vector2.h"
 
-namespace solarSystem {
 namespace window {
 
 double Drawer::pixelToReal;
@@ -54,14 +53,14 @@ void Drawer::drawCircle(const double &xCenter, const double &yCenter, double inn
     }
 }
 
-void Drawer::drawPlanetaryBody(const std::shared_ptr<planetaryBody::PlanetaryBody> &body) {
+void Drawer::drawPlanetaryBody(const std::shared_ptr<physics::GravityObject> &body) {
     Color* color = body->getColor();
     double r = body->getRadius()*realToPixel;
     Vector2int pos = transformRealToPixel(body->getPosition());
     drawCircle(pos.x, pos.y, r, color);
 }
 
-planetaryBody::Vector2int Drawer::transformRealToPixel(const Vector2 &pos) {
+physics::Vector2int Drawer::transformRealToPixel(const Vector2 &pos) {
     Vector2int pixelPos;
     pixelPos.x = static_cast<int>(round(pos.x*realToPixel - xPixelCenter));
     pixelPos.y = static_cast<int>(round(pos.y*realToPixel - yPixelCenter));
@@ -111,4 +110,3 @@ double Drawer::getYPixelCenter() {
 }
 
 } //window
-} //solarSystem

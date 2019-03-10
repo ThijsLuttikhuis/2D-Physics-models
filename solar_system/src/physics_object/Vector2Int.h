@@ -5,8 +5,7 @@
 #ifndef SOLARSYSTEM_VECTOR2INT_H
 #define SOLARSYSTEM_VECTOR2INT_H
 
-namespace solarSystem {
-namespace planetaryBody {
+namespace physics {
 
 class Vector2int {
     public:
@@ -21,6 +20,6 @@ class Vector2int {
 };
 
 }
-}
+
 
 #endif //SOLARSYSTEM_VECTOR2INT_H

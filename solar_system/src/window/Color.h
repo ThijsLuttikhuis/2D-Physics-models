@@ -5,7 +5,6 @@
 #ifndef SOLARSYSTEM_COLOR_H
 #define SOLARSYSTEM_COLOR_H
 
-namespace solarSystem {
 namespace window {
 
 
@@ -23,5 +22,5 @@ class Color {
 };
 
 }
-}
+
 #endif //SOLARSYSTEM_COLOR_H

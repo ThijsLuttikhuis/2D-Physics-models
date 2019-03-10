@@ -4,7 +4,6 @@
 
 #include "PlanetData.h"
 
-namespace solarSystem {
 namespace planetaryBody {
 
 std::vector<std::shared_ptr<PlanetaryBody>> PlanetData::planetaryBodies;
@@ -61,4 +60,3 @@ void PlanetData::setDt(double &dt) {
 }
 
 } //planetaryBody
-} //solarSystem

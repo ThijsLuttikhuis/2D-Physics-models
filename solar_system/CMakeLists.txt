@@ -18,20 +18,24 @@ set(WINDOW_SOURCES
         ${PROJECT_SOURCE_DIR}/src/window/Drawer.h
         )
 
-set(PLANETARYBODY_SOURCES
-        ${PROJECT_SOURCE_DIR}/src/planetary_body/PlanetaryBody.h
-        ${PROJECT_SOURCE_DIR}/src/planetary_body/PlanetData.h
-        ${PROJECT_SOURCE_DIR}/src/planetary_body/PlanetData.cpp
+set(PHYSICSOBJECT_SOURCES
+        ${PROJECT_SOURCE_DIR}/src/physics_object/Vector2.h
+        ${PROJECT_SOURCE_DIR}/src/physics_object/Vector2Int.h
+        ${PROJECT_SOURCE_DIR}/src/physics_object/GravityObject.cpp
+        ${PROJECT_SOURCE_DIR}/src/physics_object/GravityObject.h
+        ${PROJECT_SOURCE_DIR}/src/physics_object/PhysicsObject.cpp
+        ${PROJECT_SOURCE_DIR}/src/physics_object/PhysicsObject.h
         )
 
 set(TIMEKEEPING_SOURCES
         ${PROJECT_SOURCE_DIR}/src/time_keeping/Timer.h
-        src/window/Color.h src/planetary_body/Vector2.h src/planetary_body/Vector2Int.h src/planetary_body/PlanetaryBody.cpp)
+        src/window/Color.h
+        )
 
 add_executable(SolarSystem
         src/solar_system_simulator.cpp
         ${WINDOW_SOURCES}
-        ${PLANETARYBODY_SOURCES}
+        ${PHYSICSOBJECT_SOURCES}
         ${TIMEKEEPING_SOURCES}
         )
 

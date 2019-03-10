@@ -9,10 +9,9 @@
 #include <vector>
 #include <memory>
 
-namespace solarSystem {
 
-namespace planetaryBody {
-class PlanetaryBody;
+namespace physics {
+class GravityObject;
 }
 
 namespace window {
@@ -42,13 +41,12 @@ class Window {
         static void initializeWindow();
         static void initializeWindow(const short &width, const short &height);
         static void resetWindow();
-        static void resizeWindow(std::vector<std::shared_ptr<planetaryBody::PlanetaryBody>> bodies, int focus, double radius);
-        static void resizeWindow(std::vector<std::shared_ptr<planetaryBody::PlanetaryBody>> bodies);
+        static void resizeWindow(std::vector<std::shared_ptr<physics::GravityObject>> bodies, int focus, double radius);
+        static void resizeWindow(std::vector<std::shared_ptr<physics::GravityObject>> bodies);
         static void updateWindow();
 
 };
 
 } //window
-} //solarSystem
 
 #endif //FINDBALL_WINDOW_H

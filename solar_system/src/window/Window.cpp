@@ -5,11 +5,10 @@
 #include "Window.h"
 #include "Drawer.h"
 #include "Color.h"
-#include "../planetary_body/Vector2.h"
-#include "../planetary_body/Vector2Int.h"
-#include "../planetary_body/PlanetaryBody.h"
+#include "../physics_object/Vector2.h"
+#include "../physics_object/Vector2Int.h"
+#include "../physics_object/GravityObject.h"
 
-namespace solarSystem {
 namespace window {
 
 short Window::width;
@@ -75,8 +74,8 @@ void Window::resetWindow() {
     image = new unsigned char [width*height*4];
 }
 
-void Window::resizeWindow(std::vector<std::shared_ptr<planetaryBody::PlanetaryBody>> bodies) {
-    planetaryBody::Vector2 centerOfMass = bodies.front()->getCenterOfMass(bodies);
+void Window::resizeWindow(std::vector<std::shared_ptr<physics::GravityObject>> bodies) {
+    physics::Vector2 centerOfMass = bodies.front()->getCenterOfMass(bodies);
     double furthestDistance = bodies.front()->getFurthestObject(bodies, centerOfMass);
 
     focusBody = -1;
@@ -91,12 +90,12 @@ void Window::resizeWindow(std::vector<std::shared_ptr<planetaryBody::PlanetaryBo
     Drawer::setRealCenter(centerOfMass);
 }
 
-void Window::resizeWindow(std::vector<std::shared_ptr<planetaryBody::PlanetaryBody>> bodies, int focus,
+void Window::resizeWindow(std::vector<std::shared_ptr<physics::GravityObject>> bodies, int focus,
         double radius) {
 
     auto bodiesSize = static_cast<int>(bodies.size());
 
-    planetaryBody::Vector2 focusPos;
+    physics::Vector2 focusPos;
     if (focus < 0) {
         if (focus == -1 || focusBody == -1) {
             if (focus != -1) {
@@ -141,4 +140,3 @@ void Window::resizeWindow(std::vector<std::shared_ptr<planetaryBody::PlanetaryBo
 }
 
 } //window
-} //solarSystem

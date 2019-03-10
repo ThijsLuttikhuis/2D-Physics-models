@@ -11,12 +11,10 @@
 #include <memory>
 #include <cmath>
 
-namespace solarSystem {
 
-#define BLACK Color({0,0,0,0});
 
-namespace planetaryBody {
-class PlanetaryBody;
+namespace physics {
+class GravityObject;
 class Vector2;
 class Vector2int;
 }
@@ -26,8 +24,8 @@ namespace window {
 class Color;
 
 class Drawer {
-        using Vector2 = planetaryBody::Vector2;
-        using Vector2int = planetaryBody::Vector2int;
+        using Vector2 = physics::Vector2;
+        using Vector2int = physics::Vector2int;
     public:
 
 
@@ -37,7 +35,7 @@ class Drawer {
         static void drawCircle(const double &xCenter, const double &yCenter, double innerRadius, double outerRadius,
                 Color* color);
 
-        static void drawPlanetaryBody(const std::shared_ptr<planetaryBody::PlanetaryBody> &body);
+        static void drawPlanetaryBody(const std::shared_ptr<physics::GravityObject> &body);
         static void setPixelToReal(const double &factor);
         static void setRealToPixel(const double &factor);
         static Vector2int transformRealToPixel(const Vector2 &pos);
@@ -62,7 +60,6 @@ class Drawer {
 };
 
 } //window
-} //solarSystem
 
 #endif //SOLARSYSTEM_DRAWER_H
 

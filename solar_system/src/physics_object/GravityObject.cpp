@@ -2,88 +2,77 @@
 // Created by Thijs on 02/03/2019.
 //
 
-#include "PlanetaryBody.h"
+#include "GravityObject.h"
 #include "Vector2.h"
 
-namespace solarSystem {
-namespace planetaryBody {
+namespace physics {
 
-PlanetaryBody::PlanetaryBody(std::string &name, const double &mass, const double &radius, const Vector2 &pos,
+GravityObject::GravityObject(std::string &name, const double &mass, const double &radius, const Vector2 &pos,
         const Vector2 &vel, Color* color)
         :name(name), mass(fabs(mass)), radius(fabs(radius)),
          pos(pos), vel(vel), force({0, 0}), color(color), G(6.67e-11) { }
 
-void PlanetaryBody::setName(const std::string &name) {
-    PlanetaryBody::name = name;
+void GravityObject::setName(const std::string &name) {
+    GravityObject::name = name;
 }
 
-void PlanetaryBody::setMass(const double &mass) {
-    PlanetaryBody::mass = fabs(mass);
+void GravityObject::setMass(const double &mass) {
+    GravityObject::mass = fabs(mass);
 }
 
-void PlanetaryBody::setRadius(const double &radius) {
-    PlanetaryBody::radius = fabs(radius);
+void GravityObject::setRadius(const double &radius) {
+    GravityObject::radius = fabs(radius);
 }
 
-void PlanetaryBody::setPosition(const Vector2 &pos) {
-    PlanetaryBody::pos = pos;
+void GravityObject::setPosition(const Vector2 &pos) {
+    GravityObject::pos = pos;
 }
 
-void PlanetaryBody::setVelocity(const Vector2 &vel) {
-    PlanetaryBody::vel = vel;
+void GravityObject::setVelocity(const Vector2 &vel) {
+    GravityObject::vel = vel;
 }
 
-void PlanetaryBody::setForce(const Vector2 &force) {
-    PlanetaryBody::force = force;
+void GravityObject::setForce(const Vector2 &force) {
+    GravityObject::force = force;
 }
 
-void PlanetaryBody::setColor(Color* color) {
-    PlanetaryBody::color = color;
+void GravityObject::setColor(Color* color) {
+    GravityObject::color = color;
 }
 
-std::string PlanetaryBody::getName() const {
+std::string GravityObject::getName() const {
     return name;
 }
 
-double PlanetaryBody::getMass() const {
+double GravityObject::getMass() const {
     return mass;
 }
 
-double PlanetaryBody::getG() const {
+double GravityObject::getG() const {
     return G;
 }
 
-double PlanetaryBody::getRadius() const {
+double GravityObject::getRadius() const {
     return radius;
 }
 
-Vector2 PlanetaryBody::getPosition() const {
+Vector2 GravityObject::getPosition() const {
     return pos;
 }
 
-Vector2 PlanetaryBody::getVelocity() const {
+Vector2 GravityObject::getVelocity() const {
     return vel;
 }
 
-Vector2 PlanetaryBody::getForce() const {
+Vector2 GravityObject::getForce() const {
     return force;
 }
 
-Color* PlanetaryBody::getColor() const {
+Color* GravityObject::getColor() const {
     return color;
 }
 
-void PlanetaryBody::updateVelocity(const double &dt) {
-    vel.x = vel.x + dt*force.x/mass;
-    vel.y = vel.y + dt*force.y/mass;
-}
-
-void PlanetaryBody::updatePosition(const double &dt) {
-    pos.x = pos.x + dt*vel.x;
-    pos.y = pos.y + dt*vel.y;
-}
-
-void PlanetaryBody::updateForces(std::vector<bodyPtr> &bodies) {
+void GravityObject::updateAcceleration(std::vector<bodyPtr> &bodies) {
     for (auto &body : bodies) {
         Vector2 f = {0, 0};
         body->setForce(f);
@@ -108,7 +97,7 @@ void PlanetaryBody::updateForces(std::vector<bodyPtr> &bodies) {
 
 }
 
-Vector2 PlanetaryBody::getCenterOfMass(const std::vector<bodyPtr> &bodies) {
+Vector2 GravityObject::getCenterOfMass(const std::vector<bodyPtr> &bodies) {
     Vector2 centerOfMass = {0, 0};
     double totalMass = 0;
 
@@ -122,7 +111,7 @@ Vector2 PlanetaryBody::getCenterOfMass(const std::vector<bodyPtr> &bodies) {
     return {centerOfMass.x/totalMass, centerOfMass.y/totalMass};
 }
 
-double PlanetaryBody::getFurthestObject(const std::vector<bodyPtr> &bodies, Vector2 relativeToPos) {
+double GravityObject::getFurthestObject(const std::vector<bodyPtr> &bodies, Vector2 relativeToPos) {
     double distanceSquared = 0;
 
     for (auto &body : bodies) {
@@ -137,4 +126,4 @@ double PlanetaryBody::getFurthestObject(const std::vector<bodyPtr> &bodies, Vect
 }
 
 } //window
-} //solarSystem
+

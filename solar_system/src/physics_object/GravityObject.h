@@ -1,5 +1,3 @@
-#include <utility>
-
 //
 // Created by thijs on 27-12-18.
 //
@@ -13,27 +11,29 @@
 #include <vector>
 #include <cmath>
 #include "Vector2.h"
+#include <utility>
+#include "PhysicsObject.h"
 
-namespace solarSystem {
+
 namespace window {
 class Drawer;
 class Color;
 }
 
-namespace planetaryBody {
-class PlanetaryBody;
+namespace physics {
+class GravityObject;
 class Vector2;
 class Vector2int;
-using bodyPtr = std::shared_ptr<PlanetaryBody>;
+using bodyPtr = std::shared_ptr<GravityObject>;
 
 using Drawer = window::Drawer;
 using Color = window::Color;
 
-class PlanetaryBody {
+class GravityObject : public PhysicsObject {
 
     public:
 
-        PlanetaryBody(std::string &name, const double &mass, const double &radius,
+        GravityObject(std::string &name, const double &mass, const double &radius,
                 const Vector2 &pos, const Vector2 &vel, Color* color);
 
         void setName(const std::string &name);
@@ -53,15 +53,13 @@ class PlanetaryBody {
         Vector2 getForce() const;
         Color* getColor() const;
 
-        void updateVelocity(const double &dt);
-        void updatePosition(const double &dt);
-        void updateForces(std::vector<bodyPtr> &bodies);
+        void updateAcceleration(std::vector<bodyPtr> &bodies);
 
         Vector2 getCenterOfMass(const std::vector<bodyPtr> &bodies);
         double getFurthestObject(const std::vector<bodyPtr> &bodies, Vector2 relativeToPos);
 
     private:
-        using bodyPtr = std::shared_ptr<PlanetaryBody>;
+        using bodyPtr = std::shared_ptr<GravityObject>;
         std::string name;
         double mass;
         double radius;
@@ -73,6 +71,6 @@ class PlanetaryBody {
 };
 
 } //window
-} //solarSystem
+
 
 #endif //SOLARSYSTEM_PLANETARYBODY_H

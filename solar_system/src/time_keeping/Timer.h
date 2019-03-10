@@ -8,7 +8,6 @@
 #define SOLARSYSTEM_TIMER_H
 
 
-namespace solarSystem {
 namespace timeKeeping {
 
 class Timer {
@@ -47,5 +46,5 @@ class Timer {
 };
 
 } //timeKeeping
-} //solarSystem
+
 #endif //SOLARSYSTEM_TIMER_H

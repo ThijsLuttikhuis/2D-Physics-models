@@ -9,16 +9,15 @@
 #include <mutex>
 #include <vector>
 
-namespace solarSystem {
-namespace planetaryBody {
+namespace physics {
 
-class PlanetaryBody;
+class GravityObject;
 
 class PlanetData {
 
     private:
 
-        using bodyPtr = std::shared_ptr<PlanetaryBody>;
+        using bodyPtr = std::shared_ptr<GravityObject>;
         static std::vector<bodyPtr> planetaryBodies;
         static bool exit;
         static double dt;
@@ -47,6 +46,5 @@ class PlanetData {
 };
 
 } //planetaryBody
-} //solarSystem
 
 #endif //SOLARSYSTEM_PLANETDATA_H
