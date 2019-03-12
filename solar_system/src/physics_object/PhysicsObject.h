@@ -7,30 +7,46 @@
 
 #include "Vector2.h"
 #include "../window/Color.h"
-
+#include <memory>
+#include <vector>
 
 namespace physics {
 class Vector2;
 
 class PhysicsObject {
     protected:
+        using physicsPtr = std::shared_ptr<PhysicsObject>;
         using Color = window::Color;
-        Vector2 pos;
-        Vector2 vel;
-        Vector2 acc;
 
         double mass;
         double radius;
-        Color color;
+        Vector2 pos;
+        Vector2 vel;
+        Vector2 acc;
+        Color* color;
 
     public:
-        PhysicsObject() = default;
+        constexpr PhysicsObject(const double &mass, const double &radius,
+                                const Vector2 &pos, const Vector2 &vel, Color* color) :
+                mass(mass), radius(radius), pos(pos), vel(vel), color(color) { }
+
+        const Vector2 &getPos() const;
+        const Vector2 &getVel() const;
+        const Vector2 &getAcc() const;
+        double getMass() const;
+        double getRadius() const;
+        Color* getColor() const;
+
+        void setPos(const Vector2 &pos);
+        void setVel(const Vector2 &vel);
+        void setAcc(const Vector2 &acc);
+        void setMass(double mass);
+        void setRadius(double radius);
+        void setColor(const Color* color);
 
         void updatePosition(const double &dt);
         void updateVelocity(const double &dt);
-        virtual void updateAcceleration() = 0;
-
-
+        virtual void onUpdate(std::vector<physicsPtr> &bodies) = 0;
 
 };
 

@@ -7,15 +7,13 @@
 #include "Color.h"
 #include "../physics_object/Vector2.h"
 #include "../physics_object/Vector2Int.h"
-#include "../physics_object/GravityObject.h"
+#include "../physics_object/PhysicsObject.h"
 
 namespace window {
 
 short Window::width;
 short Window::height;
 unsigned char* Window::image;
-int Window::focusBody = -1;
-
 
 unsigned char* Window::getImage() {
     return image;
@@ -74,69 +72,43 @@ void Window::resetWindow() {
     image = new unsigned char [width*height*4];
 }
 
-void Window::resizeWindow(std::vector<std::shared_ptr<physics::GravityObject>> bodies) {
-    physics::Vector2 centerOfMass = bodies.front()->getCenterOfMass(bodies);
-    double furthestDistance = bodies.front()->getFurthestObject(bodies, centerOfMass);
 
-    focusBody = -1;
-
-    double factor;
-    if (width < height)
-        factor = 0.45 * width/furthestDistance;
-    else
-        factor = 0.45 * height/furthestDistance;
-
-    Drawer::setRealToPixel(factor);
-    Drawer::setRealCenter(centerOfMass);
+void Window::drawCircle(const short &xCenter, const short &yCenter, double radius, Color *color) {
+    auto width = getWidth();
+    auto height = getHeight();
+    int pixels = width > height ? height : width;
+    if (xCenter < 0 || xCenter > width || yCenter < 0 || yCenter > height) return;
+    if (radius < 4.0 || radius < pixels*0.005) {
+        double inner = pixels*0.010;
+        double outer = (pixels*0.002 > 1.0 ? pixels*0.012 : pixels*0.010 + 1.0) ;
+        drawCircle(xCenter, yCenter, inner, outer, color);
+    }
+    double radiusSquared = radius*radius;
+    for (int x = static_cast<int>(round(xCenter - radius)); x < round(xCenter + radius); x ++) {
+        for (int y = static_cast<int>(round(yCenter - radius)); y < round(yCenter + radius); y ++) {
+            double dx = x - xCenter;
+            double dy = y - yCenter;
+            if (dx*dx + dy*dy < radiusSquared) {
+                setPixel(x, y, color);
+            }
+        }
+    }
 }
 
-void Window::resizeWindow(std::vector<std::shared_ptr<physics::GravityObject>> bodies, int focus,
-        double radius) {
+void Window::drawCircle(const short &xCenter, const short &yCenter, double innerRadius, double outerRadius,
+                        Color* color) {
 
-    auto bodiesSize = static_cast<int>(bodies.size());
-
-    physics::Vector2 focusPos;
-    if (focus < 0) {
-        if (focus == -1 || focusBody == -1) {
-            if (focus != -1) {
-                focusBody = 0;
-                focusPos = bodies[focusBody]->getPosition();
-            }
-            else {
-                focusPos = {0, 0};
-                focusBody = - 1;
+    double outerRadiusSquared = outerRadius*outerRadius;
+    double innerRadiusSquared = innerRadius*innerRadius;
+    for (auto x = static_cast<short>(round(xCenter - outerRadius)); x < round(xCenter + outerRadius); x ++) {
+        for (auto y = static_cast<short>(round(yCenter - outerRadius)); y < round(yCenter + outerRadius); y ++) {
+            double dx = x - xCenter;
+            double dy = y - yCenter;
+            if (dx*dx + dy*dy < outerRadiusSquared && dx*dx + dy*dy > innerRadiusSquared) {
+                setPixel(x, y, color);
             }
         }
-        else {
-            if (focus == - 2)
-                focusBody = (focusBody < bodiesSize - 1 ? focusBody + 1 : 0);
-            else if (focus == - 3)
-                focusBody = (focusBody > 0 ? focusBody - 1 : bodiesSize - 1);
-
-            focusPos = bodies[focusBody]->getPosition();
-        }
     }
-    else {
-        focus = focus < bodiesSize - 1 ? focus : bodiesSize - 1;
-        focusPos = bodies[focus]->getPosition();
-        focusBody = focus;
-    }
-
-    double factor;
-    if (radius < 0.0) {
-        factor = Drawer::getRealToPixel()*radius*-1;
-    }
-    else {
-        if (width < height)
-            factor = 0.45 * width/radius;
-        else
-            factor = 0.45 * height/radius;
-    }
-
-
-    Drawer::setRealToPixel(factor);
-    Drawer::setRealCenter(focusPos);
-
 }
 
 } //window

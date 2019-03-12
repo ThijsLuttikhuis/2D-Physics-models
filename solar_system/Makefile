@@ -123,32 +123,32 @@ SolarSystem/fast:
 	$(MAKE) -f CMakeFiles/SolarSystem.dir/build.make CMakeFiles/SolarSystem.dir/build
 .PHONY : SolarSystem/fast
 
-src/planetary_body/PlanetData.o: src/planetary_body/PlanetData.cpp.o
+src/planetary_body/ObjectData.o: src/planetary_body/ObjectData.cpp.o
 
-.PHONY : src/planetary_body/PlanetData.o
+.PHONY : src/planetary_body/ObjectData.o
 
 # target to build an object file
-src/planetary_body/PlanetData.cpp.o:
-	$(MAKE) -f CMakeFiles/SolarSystem.dir/build.make CMakeFiles/SolarSystem.dir/src/planetary_body/PlanetData.cpp.o
-.PHONY : src/planetary_body/PlanetData.cpp.o
+src/planetary_body/ObjectData.cpp.o:
+	$(MAKE) -f CMakeFiles/SolarSystem.dir/build.make CMakeFiles/SolarSystem.dir/src/planetary_body/ObjectData.cpp.o
+.PHONY : src/planetary_body/ObjectData.cpp.o
 
-src/planetary_body/PlanetData.i: src/planetary_body/PlanetData.cpp.i
+src/planetary_body/ObjectData.i: src/planetary_body/ObjectData.cpp.i
 
-.PHONY : src/planetary_body/PlanetData.i
+.PHONY : src/planetary_body/ObjectData.i
 
 # target to preprocess a source file
-src/planetary_body/PlanetData.cpp.i:
-	$(MAKE) -f CMakeFiles/SolarSystem.dir/build.make CMakeFiles/SolarSystem.dir/src/planetary_body/PlanetData.cpp.i
-.PHONY : src/planetary_body/PlanetData.cpp.i
+src/planetary_body/ObjectData.cpp.i:
+	$(MAKE) -f CMakeFiles/SolarSystem.dir/build.make CMakeFiles/SolarSystem.dir/src/planetary_body/ObjectData.cpp.i
+.PHONY : src/planetary_body/ObjectData.cpp.i
 
-src/planetary_body/PlanetData.s: src/planetary_body/PlanetData.cpp.s
+src/planetary_body/ObjectData.s: src/planetary_body/ObjectData.cpp.s
 
-.PHONY : src/planetary_body/PlanetData.s
+.PHONY : src/planetary_body/ObjectData.s
 
 # target to generate assembly for a file
-src/planetary_body/PlanetData.cpp.s:
-	$(MAKE) -f CMakeFiles/SolarSystem.dir/build.make CMakeFiles/SolarSystem.dir/src/planetary_body/PlanetData.cpp.s
-.PHONY : src/planetary_body/PlanetData.cpp.s
+src/planetary_body/ObjectData.cpp.s:
+	$(MAKE) -f CMakeFiles/SolarSystem.dir/build.make CMakeFiles/SolarSystem.dir/src/planetary_body/ObjectData.cpp.s
+.PHONY : src/planetary_body/ObjectData.cpp.s
 
 src/solar_system_simulator.o: src/solar_system_simulator.cpp.o
 
@@ -240,9 +240,9 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... SolarSystem"
-	@echo "... src/planetary_body/PlanetData.o"
-	@echo "... src/planetary_body/PlanetData.i"
-	@echo "... src/planetary_body/PlanetData.s"
+	@echo "... src/planetary_body/ObjectData.o"
+	@echo "... src/planetary_body/ObjectData.i"
+	@echo "... src/planetary_body/ObjectData.s"
 	@echo "... src/solar_system_simulator.o"
 	@echo "... src/solar_system_simulator.i"
 	@echo "... src/solar_system_simulator.s"

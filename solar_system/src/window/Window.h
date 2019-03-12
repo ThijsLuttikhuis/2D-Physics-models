@@ -24,11 +24,16 @@ class Window {
         static short width;
         static short height;
         static unsigned char* image;
-        static int focusBody;
 
     public:
 
         static unsigned char* getImage();
+
+        static void drawCircle(const short &xCenter, const short &yCenter, double radius,
+                               Color* color);
+
+        static void drawCircle(const short &xCenter, const short &yCenter, double innerRadius, double outerRadius,
+                               Color* color);
 
         static short getWidth();
         static short getHeight();
@@ -41,8 +46,7 @@ class Window {
         static void initializeWindow();
         static void initializeWindow(const short &width, const short &height);
         static void resetWindow();
-        static void resizeWindow(std::vector<std::shared_ptr<physics::GravityObject>> bodies, int focus, double radius);
-        static void resizeWindow(std::vector<std::shared_ptr<physics::GravityObject>> bodies);
+
         static void updateWindow();
 
 };

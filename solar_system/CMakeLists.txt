@@ -14,8 +14,7 @@ link_directories(${PROJECT_SOURCE_DIR}/include/lib-mingw)
 set(WINDOW_SOURCES
         ${PROJECT_SOURCE_DIR}/src/window/Window.cpp
         ${PROJECT_SOURCE_DIR}/src/window/Window.h
-        ${PROJECT_SOURCE_DIR}/src/window/Drawer.cpp
-        ${PROJECT_SOURCE_DIR}/src/window/Drawer.h
+        ${PROJECT_SOURCE_DIR}/src/window/Color.h
         )
 
 set(PHYSICSOBJECT_SOURCES
@@ -25,6 +24,8 @@ set(PHYSICSOBJECT_SOURCES
         ${PROJECT_SOURCE_DIR}/src/physics_object/GravityObject.h
         ${PROJECT_SOURCE_DIR}/src/physics_object/PhysicsObject.cpp
         ${PROJECT_SOURCE_DIR}/src/physics_object/PhysicsObject.h
+        ${PROJECT_SOURCE_DIR}/src/physics_object/ObjectData.cpp
+        ${PROJECT_SOURCE_DIR}/src/physics_object/ObjectData.h
         )
 
 set(TIMEKEEPING_SOURCES

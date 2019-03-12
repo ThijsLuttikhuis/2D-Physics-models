@@ -5,12 +5,12 @@
 #ifndef SOLARSYSTEM_VECTOR2_H
 #define SOLARSYSTEM_VECTOR2_H
 
+#include <cmath>
 
 namespace physics {
 
 class Vector2 {
     public:
-        using Hi = Vector2;
         constexpr Vector2()
                 :x(0.0), y(0.0) { }
         constexpr Vector2(double x, double y)
@@ -20,7 +20,11 @@ class Vector2 {
         double x;
         double y;
 
-        Hi operator+(const Vector2 &other) {
+        double length() {
+            return sqrt(x*x+y*y);
+        }
+
+        Vector2 operator+(const Vector2 &other) {
             return Vector2(this->x + other.x, this->y + other.y);
         }
         Vector2 operator+(const double &scalar) {
@@ -44,6 +48,13 @@ class Vector2 {
         Vector2 operator/(const double &scalar) {
             return Vector2(this->x / scalar, this->y / scalar);
         }
+        Vector2 operator+=(const Vector2 &other) {
+            return Vector2(this->x += other.x, this->y += other.y);
+        }
+        Vector2 operator+=(const double &scalar) {
+            return Vector2(this->x += scalar, this->y += scalar);
+        }
+
 };
 
 }
