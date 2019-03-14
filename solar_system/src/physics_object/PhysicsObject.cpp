@@ -14,15 +14,15 @@ void physics::PhysicsObject::updateVelocity(const double &dt){
     this->vel = this->vel + this->acc * dt;
 }
 
-void PhysicsObject::setPos(const Vector2 &pos) {
+void PhysicsObject::setPos(Vector2 pos) {
     PhysicsObject::pos = pos;
 }
 
-void PhysicsObject::setVel(const Vector2 &vel) {
+void PhysicsObject::setVel(Vector2 vel) {
     PhysicsObject::vel = vel;
 }
 
-void PhysicsObject::setAcc(const Vector2 &acc) {
+void PhysicsObject::setAcc(Vector2 acc) {
     PhysicsObject::acc = acc;
 }
 

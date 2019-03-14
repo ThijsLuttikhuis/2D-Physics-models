@@ -9,6 +9,8 @@
 #include "../window/Color.h"
 #include <memory>
 #include <vector>
+#include <string>
+#include <cmath>
 
 namespace physics {
 class Vector2;
@@ -37,9 +39,9 @@ class PhysicsObject {
         double getRadius() const;
         Color* getColor() const;
 
-        void setPos(const Vector2 &pos);
-        void setVel(const Vector2 &vel);
-        void setAcc(const Vector2 &acc);
+        void setPos(Vector2 pos);
+        void setVel(Vector2 vel);
+        void setAcc(Vector2 acc);
         void setMass(double mass);
         void setRadius(double radius);
         void setColor(const Color* color);
@@ -47,6 +49,7 @@ class PhysicsObject {
         void updatePosition(const double &dt);
         void updateVelocity(const double &dt);
         virtual void onUpdate(std::vector<physicsPtr> &bodies) = 0;
+        virtual void afterUpdate(const double &dt) = 0;
 
 };
 

@@ -2,7 +2,6 @@
 // Created by thijs on 27-12-18.
 //
 
-#include <random>
 #include <memory>
 #include <thread>
 #include <vector>
@@ -10,6 +9,8 @@
 
 #include "physics_object/PhysicsObject.h"
 #include "physics_object/GravityObject.h"
+#include "physics_object/CollisionObject.h"
+
 #include "physics_object/ObjectData.h"
 #include "physics_object/Vector2.h"
 #include "physics_object/Vector2Int.h"
@@ -26,6 +27,7 @@
 namespace physics {
 class PhysicsObject;
 class GravityObject;
+class CollisionObject;
 class Vector2;
 class Vector2Int;
 }
@@ -41,29 +43,32 @@ class Drawer;
 
 using physicsPtr = std::shared_ptr<physics::PhysicsObject>;
 
-std::vector<physicsPtr> initBodies(const double maxR) {
+std::vector<physicsPtr> initBodies() {
+
     std::vector<physicsPtr> bodies;
-
-    double power = 0.8;
-    double factor = 0.7;
-
-    int nBodies2 = 10;
-    for (double r = maxR/nBodies2; r < maxR; r+=maxR/nBodies2) {
-        for (double theta = 0.2; theta < 2*PI; theta+=(2*PI*(maxR-r)/maxR)/nBodies2) {
-            double mass = 1e30;
-            double radius = 1e10;
-            physics::Vector2 pos = {r*sin(theta), r*cos(theta)};
-            physics::Vector2 vel = {pow(r,power)*cos(theta)*pow(10,-20*power)*factor, -pow(r,power)*sin(theta)*pow(10,-20*power)*factor};
-            auto* color = new window::Color(255,0,0,255);
-
-            physics::GravityObject gravityObject =
-                    physics::GravityObject(mass, radius, pos, vel, color);
-
-            auto gravityP = std::make_shared<physics::GravityObject>(gravityObject);
-            bodies.push_back(gravityP);
-        }
+    for (int i = 0; i < 50; i++) {
+        auto* color = new window::Color(255-2*i, 0, 0, 255);
+        auto cObj = physics::CollisionObject(2+i*0.1, 1, physics::Vector2(i*10, i*1e-20), physics::Vector2(1-i*i, 0), color);
+        physicsPtr cObjPtr = std::make_shared<physics::CollisionObject>(cObj);
+        bodies.push_back(cObjPtr);
     }
     return bodies;
+//
+//    const unsigned short AMOUNT_OF_OBJECTS = 3;
+//    std::vector<double> mass = {1.989e30, 5.972e24, 7.34e22};
+//    std::vector<double> radius = {6.955e8, 6.371e6, 1.737e6};
+//    std::vector<physics::Vector2> pos = {{0.0,0.0},{1.496e11,0.0},{1.496e11,3.84e8}};
+//    std::vector<physics::Vector2> vel = {{0.0,0.0},{0.0,2.96e4},{1.023e3,2.96e4}};
+//
+//    for (int i = 0; i < AMOUNT_OF_OBJECTS; i++) {
+//        auto* color = new window::Color(255-64*i,0+64*i,0,255);
+//        physics::GravityObject gObj = physics::GravityObject(mass[i], radius[i],
+//                pos[i], vel[i], color);
+//        physicsPtr gObjPtr = std::make_shared<physics::GravityObject>(gObj);
+//        bodies.push_back(gObjPtr);
+//    }
+//
+//    return bodies;
 }
 
 void windowThread(const short &xPixels, const short &yPixels, bool* exitPtr) {
@@ -91,11 +96,15 @@ void windowThread(const short &xPixels, const short &yPixels, bool* exitPtr) {
 //draw objects
         bodies = physics::ObjectData::getBodies();
 
+        double zoomFactor = 4e0;
+
         for (auto &body : bodies) {
-            double x = -(body->getPos().x*500/1e21 - window::Window::getWidth()*0.5);
-            double y = -(body->getPos().y*500/1e21 - window::Window::getHeight()*0.5);
-            double r = body->getRadius()*768/10e20;
+            double x = (window::Window::getWidth()*0.5 - body->getPos().x*zoomFactor);
+            double y = (window::Window::getHeight()*0.5 - body->getPos().y*zoomFactor);
+            double r = body->getRadius()*zoomFactor;
+//            std::cout << "x: " << x << ", y: " << y << std::endl;
             window::Color* color = body->getColor();
+
             window::Window::drawCircle(static_cast<const short &>(x), static_cast<const short &>(y), r, color);
         }
 
@@ -113,14 +122,16 @@ void windowThread(const short &xPixels, const short &yPixels, bool* exitPtr) {
 
 void updateBodiesThread(const double &dt, bool* exitPtr) {
 
-    double maxR = 10e20;
-    std::vector<physicsPtr> bodies = initBodies(maxR);
+
+    std::vector<physicsPtr> bodies = initBodies();
 
     while (! *exitPtr) {
         for (auto &body : bodies) {
             body->onUpdate(bodies);
         }
+
         for (auto &body : bodies) {
+            body->afterUpdate(dt);
             body->updateVelocity(dt);
             body->updatePosition(dt);
         }
@@ -131,19 +142,20 @@ void updateBodiesThread(const double &dt, bool* exitPtr) {
 
 int main() {
 
-    double dt = 2e17;
-    const short xPixels = 1366;
-    const short yPixels = 768;
+    double dt = 4e-6;
+    const short xPixels = 2200;
+    const short yPixels = 500;
     bool exit = false;
     bool* exitPtr = &exit;
 
-    window::Window::initializeWindow();
+    window::Window::initializeWindow(xPixels, yPixels);
 
     std::thread t1(windowThread, xPixels, yPixels, exitPtr);
     std::thread t2(updateBodiesThread, dt, exitPtr);
 
     t1.join();
     t2.join();
+    delete exitPtr;
 
     return 0;
 }

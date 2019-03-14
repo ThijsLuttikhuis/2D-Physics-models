@@ -5,27 +5,10 @@
 #ifndef SOLARSYSTEM_PLANETARYBODY_H
 #define SOLARSYSTEM_PLANETARYBODY_H
 
-#include <iostream>
-#include <string>
-#include <memory>
-#include <vector>
-#include <cmath>
-#include "Vector2.h"
-#include <utility>
+
 #include "PhysicsObject.h"
 
-namespace window {
-class Drawer;
-class Color;
-}
-
 namespace physics {
-class GravityObject;
-class Vector2;
-class Vector2int;
-
-using Drawer = window::Drawer;
-using Color = window::Color;
 
 class GravityObject : public PhysicsObject {
     private:
@@ -38,10 +21,10 @@ class GravityObject : public PhysicsObject {
                 PhysicsObject(mass, radius, pos, vel, color) { }
 
         void onUpdate(std::vector<physicsPtr> &bodies) override;
+        void afterUpdate(const double &dt) override;
 
 };
 
-} //window
-
+} //physics
 
 #endif //SOLARSYSTEM_PLANETARYBODY_H

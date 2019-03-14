@@ -20,8 +20,14 @@ class Vector2 {
         double x;
         double y;
 
+        double dot(const Vector2 &other) {
+            return this->x*other.x + this->y*other.y;
+        }
         double length() {
-            return sqrt(x*x+y*y);
+            return sqrt(this->length2());
+        }
+        double length2() {
+            return this->dot(*this);
         }
 
         Vector2 operator+(const Vector2 &other) {
@@ -53,6 +59,12 @@ class Vector2 {
         }
         Vector2 operator+=(const double &scalar) {
             return Vector2(this->x += scalar, this->y += scalar);
+        }
+        Vector2 operator-=(const Vector2 &other) {
+            return Vector2(this->x -= other.x, this->y -= other.y);
+        }
+        Vector2 operator-=(const double &scalar) {
+            return Vector2(this->x -= scalar, this->y -= scalar);
         }
 
 };

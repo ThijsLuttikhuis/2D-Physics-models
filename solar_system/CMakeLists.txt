@@ -22,6 +22,8 @@ set(PHYSICSOBJECT_SOURCES
         ${PROJECT_SOURCE_DIR}/src/physics_object/Vector2Int.h
         ${PROJECT_SOURCE_DIR}/src/physics_object/GravityObject.cpp
         ${PROJECT_SOURCE_DIR}/src/physics_object/GravityObject.h
+        ${PROJECT_SOURCE_DIR}/src/physics_object/CollisionObject.cpp
+        ${PROJECT_SOURCE_DIR}/src/physics_object/CollisionObject.h
         ${PROJECT_SOURCE_DIR}/src/physics_object/PhysicsObject.cpp
         ${PROJECT_SOURCE_DIR}/src/physics_object/PhysicsObject.h
         ${PROJECT_SOURCE_DIR}/src/physics_object/ObjectData.cpp

@@ -8,27 +8,27 @@
 namespace physics {
 
 void GravityObject::onUpdate(std::vector<physicsPtr> &bodies) {
-    this->acc = {0,0};
+    acc = Vector2();
+
     for (auto &body : bodies) {
 
-        Vector2 r = {pos.x - body->getPos().x,
-                     pos.y - body->getPos().y};
+        Vector2 dPos = pos - body->getPos();
 
-        if (r.length() < 1e2) {
+        if (dPos.length() < 1e2) {
             continue;
         }
-        else if (r.length() < 3e18) {
-            this->pos = {1e100, 1e100};
-            continue;
-        }
-        double dist2 = r.x * r.x + r.y * r.y;
+
+        double dist2 = dPos.x * dPos.x + dPos.y * dPos.y;
         double dist = sqrt(dist2);
 
         double gmmDivDist = G * mass * body->getMass() / (dist2);
 
-        Vector2 force = {gmmDivDist * r.x / dist, gmmDivDist * r.y / dist};
-        this->acc += force * (-1 / mass);
+        Vector2 force = {gmmDivDist * dPos.x / dist, gmmDivDist * dPos.y / dist};
+        acc += force * (-1 / mass);
     }
+
+}
+void GravityObject::afterUpdate(const double &dt) {
 
 }
 
