@@ -3,11 +3,6 @@
 //
 
 #include "Window.h"
-#include "Drawer.h"
-#include "Color.h"
-#include "../physics_object/Vector2.h"
-#include "../physics_object/Vector2Int.h"
-#include "../physics_object/PhysicsObject.h"
 
 namespace window {
 
@@ -109,6 +104,19 @@ void Window::drawCircle(const short &xCenter, const short &yCenter, double inner
             }
         }
     }
+}
+
+physics::Vector2Int Window::toPixel(Vector2 &pos) {
+    double zoomFactor = 4e0;
+    double x = width*0.5 - pos.x * zoomFactor;
+    double y = height*0.5 - pos.y * zoomFactor;
+    return Vector2Int(static_cast<int>(x), static_cast<int>(y));
+}
+
+short Window::toPixel(double &r) {
+    double zoomFactor = 4e0;
+    return static_cast<short>(r * zoomFactor);
+
 }
 
 } //window

@@ -16,7 +16,7 @@
 namespace physics {
 class GravityObject;
 class Vector2;
-class Vector2int;
+class Vector2Int;
 }
 
 
@@ -25,7 +25,7 @@ class Color;
 
 class Drawer {
         using Vector2 = physics::Vector2;
-        using Vector2int = physics::Vector2int;
+        using Vector2int = physics::Vector2Int;
     public:
 
 

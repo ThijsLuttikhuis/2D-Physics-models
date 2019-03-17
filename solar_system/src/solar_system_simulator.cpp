@@ -10,6 +10,7 @@
 #include "physics_object/PhysicsObject.h"
 #include "physics_object/GravityObject.h"
 #include "physics_object/CollisionObject.h"
+#include "physics_object/WallObject.h"
 
 #include "physics_object/ObjectData.h"
 #include "physics_object/Vector2.h"
@@ -21,6 +22,7 @@
 #include "window/Window.h"
 
 #include "../include/GLFW/glfw3.h"
+#include "physics_object/WallObject.h"
 
 #define PI 3.141592653589793
 
@@ -28,6 +30,7 @@ namespace physics {
 class PhysicsObject;
 class GravityObject;
 class CollisionObject;
+class WallObject;
 class Vector2;
 class Vector2Int;
 }
@@ -46,12 +49,18 @@ using physicsPtr = std::shared_ptr<physics::PhysicsObject>;
 std::vector<physicsPtr> initBodies() {
 
     std::vector<physicsPtr> bodies;
-    for (int i = 0; i < 50; i++) {
-        auto* color = new window::Color(255-2*i, 0, 0, 255);
-        auto cObj = physics::CollisionObject(2+i*0.1, 1, physics::Vector2(i*10, i*1e-20), physics::Vector2(1-i*i, 0), color);
+    for (int i = 0; i < 2; i++) {
+        auto* color = new window::Color(255, 0, 0, 255);
+        auto cObj = physics::CollisionObject(1+i*99999, 1, physics::Vector2(i*10, 0), physics::Vector2(-1*i*i, 0), color);
         physicsPtr cObjPtr = std::make_shared<physics::CollisionObject>(cObj);
         bodies.push_back(cObjPtr);
     }
+
+    auto* color = new window::Color(255, 255, 255, 255);
+    auto wObj = physics::WallObject(1e300, 1, physics::Vector2(-10, -10), physics::Vector2(-10, 10), color);
+    physicsPtr wObjPtr = std::make_shared<physics::WallObject>(wObj);
+    bodies.push_back(wObjPtr);
+
     return bodies;
 //
 //    const unsigned short AMOUNT_OF_OBJECTS = 3;
@@ -96,16 +105,10 @@ void windowThread(const short &xPixels, const short &yPixels, bool* exitPtr) {
 //draw objects
         bodies = physics::ObjectData::getBodies();
 
-        double zoomFactor = 4e0;
+//        double zoomFactor = 4e0;
 
         for (auto &body : bodies) {
-            double x = (window::Window::getWidth()*0.5 - body->getPos().x*zoomFactor);
-            double y = (window::Window::getHeight()*0.5 - body->getPos().y*zoomFactor);
-            double r = body->getRadius()*zoomFactor;
-//            std::cout << "x: " << x << ", y: " << y << std::endl;
-            window::Color* color = body->getColor();
-
-            window::Window::drawCircle(static_cast<const short &>(x), static_cast<const short &>(y), r, color);
+            body->draw();
         }
 
         glDrawPixels(xPixels, yPixels, GL_RGBA, GL_UNSIGNED_BYTE, window::Window::getImage()); //draw pixel
@@ -124,6 +127,9 @@ void updateBodiesThread(const double &dt, bool* exitPtr) {
 
 
     std::vector<physicsPtr> bodies = initBodies();
+    for (auto &body : bodies) {
+        body->onInitialize();
+    }
 
     while (! *exitPtr) {
         for (auto &body : bodies) {
@@ -142,7 +148,7 @@ void updateBodiesThread(const double &dt, bool* exitPtr) {
 
 int main() {
 
-    double dt = 4e-6;
+    double dt = 1e-5;
     const short xPixels = 2200;
     const short yPixels = 500;
     bool exit = false;

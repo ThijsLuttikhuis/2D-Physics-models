@@ -18,11 +18,13 @@ class GravityObject : public PhysicsObject {
 
         constexpr GravityObject(const double &mass, const double &radius,
                                 const Vector2 &pos, const Vector2 &vel, Color* color) :
-                PhysicsObject(mass, radius, pos, vel, color) { }
+                PhysicsObject(mass, radius, pos, vel, color, GRAVITY) { }
 
+        void draw() override;
+        void onInitialize() override {};
         void onUpdate(std::vector<physicsPtr> &bodies) override;
         void afterUpdate(const double &dt) override;
-
+        void getAction(const PhysicsObject* body) override;
 };
 
 } //physics

@@ -22,17 +22,20 @@ set(PHYSICSOBJECT_SOURCES
         ${PROJECT_SOURCE_DIR}/src/physics_object/Vector2Int.h
         ${PROJECT_SOURCE_DIR}/src/physics_object/GravityObject.cpp
         ${PROJECT_SOURCE_DIR}/src/physics_object/GravityObject.h
+        ${PROJECT_SOURCE_DIR}/src/physics_object/WallObject.cpp
+        ${PROJECT_SOURCE_DIR}/src/physics_object/WallObject.h
         ${PROJECT_SOURCE_DIR}/src/physics_object/CollisionObject.cpp
         ${PROJECT_SOURCE_DIR}/src/physics_object/CollisionObject.h
         ${PROJECT_SOURCE_DIR}/src/physics_object/PhysicsObject.cpp
         ${PROJECT_SOURCE_DIR}/src/physics_object/PhysicsObject.h
+
         ${PROJECT_SOURCE_DIR}/src/physics_object/ObjectData.cpp
         ${PROJECT_SOURCE_DIR}/src/physics_object/ObjectData.h
         )
 
 set(TIMEKEEPING_SOURCES
         ${PROJECT_SOURCE_DIR}/src/time_keeping/Timer.h
-        src/window/Color.h
+        ${PROJECT_SOURCE_DIR}/src/window/Color.h
         )
 
 add_executable(SolarSystem

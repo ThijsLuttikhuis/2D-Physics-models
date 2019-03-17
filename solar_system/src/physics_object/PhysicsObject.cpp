@@ -63,4 +63,8 @@ PhysicsObject::Color* PhysicsObject::getColor() const {
     return color;
 }
 
+PhysicsObject::PhysicsType PhysicsObject::getType() const {
+    return type;
+}
+
 } //physics

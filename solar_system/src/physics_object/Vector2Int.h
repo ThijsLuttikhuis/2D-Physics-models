@@ -7,13 +7,13 @@
 
 namespace physics {
 
-class Vector2int {
+class Vector2Int {
     public:
-        constexpr Vector2int()
+        constexpr Vector2Int()
                 :x(0), y(0) { }
-        constexpr Vector2int(int x, int y)
+        constexpr Vector2Int(int x, int y)
                 :x(x), y(y) { }
-        constexpr Vector2int(const Vector2int &copy) = default;
+        constexpr Vector2Int(const Vector2Int &copy) = default;
 
         int x;
         int y;
