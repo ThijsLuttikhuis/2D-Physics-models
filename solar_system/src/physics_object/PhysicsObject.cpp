@@ -7,11 +7,11 @@
 namespace physics {
 
 void physics::PhysicsObject::updatePosition(const double &dt) {
-    this->pos = this->pos + this->vel * dt;
+    pos += vel * dt;
 }
 
 void physics::PhysicsObject::updateVelocity(const double &dt){
-    this->vel = this->vel + this->acc * dt;
+    vel += acc * dt;
 }
 
 void PhysicsObject::setPos(Vector2 pos) {
@@ -65,6 +65,18 @@ PhysicsObject::Color* PhysicsObject::getColor() const {
 
 PhysicsObject::PhysicsType PhysicsObject::getType() const {
     return type;
+}
+
+void PhysicsObject::updateTimeStep(const double &dt) {
+    updatePosition(dt);
+    updateVelocity(dt);
+}
+
+void PhysicsObject::onUpdate(std::vector<Physics::physicsPtr> &bodies) {
+    std::vector<physicsObjectPtr> physicsBodies;
+    for (auto &body : bodies) {
+        physicsBodies.push_back(bodies);
+    }
 }
 
 } //physics

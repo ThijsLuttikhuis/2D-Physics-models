@@ -6,6 +6,7 @@
 #define SOLARSYSTEM_PHYSICSOBJECT_H
 
 #include "Vector2.h"
+#include "../Physics.h"
 #include "../window/Color.h"
 #include "../window/Window.h"
 #include <memory>
@@ -14,17 +15,19 @@
 #include <cmath>
 
 namespace physics {
+
 class Vector2;
 
-class PhysicsObject {
+class PhysicsObject : public Physics {
     protected:
         enum PhysicsType {
           GRAVITY,
           COLLISION,
-          WALL
+          WALL,
+          GRID
         };
 
-        using physicsPtr = std::shared_ptr<PhysicsObject>;
+        using physicsObjectPtr = std::shared_ptr<PhysicsObject>;
         using Color = window::Color;
 
         double mass;
@@ -37,10 +40,12 @@ class PhysicsObject {
 
         Vector2 temp;
 
+        void updatePosition(const double &dt);
+        void updateVelocity(const double &dt);
     public:
         constexpr PhysicsObject(const double &mass, const double &radius,
                                 const Vector2 &pos, const Vector2 &vel,
-                                Color* color, PhysicsType type) :
+                                Color* color, PhysicsType type) : Physics(),
                 mass(mass), radius(radius), pos(pos), vel(vel), color(color), type(type) { }
 
         const Vector2 &getPos() const;
@@ -58,14 +63,9 @@ class PhysicsObject {
         void setRadius(double radius);
         void setColor(const Color* color);
 
-        virtual void draw() = 0;
-        void updatePosition(const double &dt);
-        void updateVelocity(const double &dt);
-
-        virtual void onInitialize() = 0;
-        virtual void onUpdate(std::vector<physicsPtr> &bodies) = 0;
-        virtual void afterUpdate(const double &dt) = 0;
-        virtual void getAction(const PhysicsObject* body) = 0;
+        virtual void update() = 0;
+        void onUpdate(std::vector<physicsPtr> &bodies) override;
+        void updateTimeStep(const double &dt) override;
 };
 
 } // physics

@@ -31,7 +31,11 @@ class Window {
         static short width;
         static short height;
         static unsigned char* image;
-
+        static double zoomFactor;
+    public:
+        static void setZoomFactor(double zoomFactor);
+    public:
+        static double getZoomFactor();
     public:
 
         static unsigned char* getImage();

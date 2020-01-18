@@ -24,7 +24,7 @@ class GravityObject : public PhysicsObject {
         void onInitialize() override {};
         void onUpdate(std::vector<physicsPtr> &bodies) override;
         void afterUpdate(const double &dt) override;
-        void getAction(const PhysicsObject* body) override;
+        void getAction(const Physics* body) override;
 };
 
 } //physics

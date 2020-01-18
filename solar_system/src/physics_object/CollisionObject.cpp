@@ -5,13 +5,17 @@
 #include "CollisionObject.h"
 #include "../window/Window.h"
 
-void physics::CollisionObject::onUpdate(std::vector<physicsPtr> &bodies) {
+namespace physics {
+
+unsigned int CollisionObject::collisions = 0;
+
+void CollisionObject::onUpdate(std::vector<physicsPtr> &bodies) {
     acc = Vector2();
     temp = vel;
 
     for (auto &body : bodies) {
 
-        if (body->getType() == PhysicsType::WALL) {
+        if (body->getType() == WALL) {
             body->getAction(this);
         }
 
@@ -19,6 +23,10 @@ void physics::CollisionObject::onUpdate(std::vector<physicsPtr> &bodies) {
         Vector2 dPos = pos - body->getPos();
 
         if (dPos.length() > radius * 1e-2 && dPos.length() <= maxRadius) {
+            if (body->getType() == COLLISION) {
+                collisions ++;
+            }
+
             double massF = 2 * body->getMass() / (mass + body->getMass());
             Vector2 dV = vel - body->getVel();
             Vector2 newV = dPos * ((massF * dV.dot(dPos)) / dPos.length2());
@@ -27,19 +35,19 @@ void physics::CollisionObject::onUpdate(std::vector<physicsPtr> &bodies) {
     }
 }
 
-void physics::CollisionObject::afterUpdate(const double &dt) {
+void CollisionObject::afterUpdate(const double &dt) {
     vel = temp;
 }
 
-void physics::CollisionObject::onInitialize() {
+void CollisionObject::onInitialize() {
 
 }
 
-void physics::CollisionObject::getAction(const physics::PhysicsObject* body) {
+void CollisionObject::getAction(const Physics* body) {
 
 }
 
-void physics::CollisionObject::draw() {
+void CollisionObject::draw() {
     Vector2Int drawPos = window::Window::toPixel(pos);
     short drawR = window::Window::toPixel(radius);
 
@@ -47,3 +55,8 @@ void physics::CollisionObject::draw() {
                                static_cast<const short &>(drawPos.y),
                                drawR, getColor());
 }
+unsigned int CollisionObject::getCollisions() {
+    return collisions;
+}
+
+} //physics

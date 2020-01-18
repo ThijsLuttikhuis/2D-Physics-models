@@ -17,7 +17,12 @@ set(WINDOW_SOURCES
         ${PROJECT_SOURCE_DIR}/src/window/Color.h
         )
 
-set(PHYSICSOBJECT_SOURCES
+set(GRID_SOURCES
+        ${PROJECT_SOURCE_DIR}/src/grid_based/GridBased.cpp
+        ${PROJECT_SOURCE_DIR}/src/grid_based/GridBased.h
+        )
+
+set(PHYSICS_OBJECT_SOURCES
         ${PROJECT_SOURCE_DIR}/src/physics_object/Vector2.h
         ${PROJECT_SOURCE_DIR}/src/physics_object/Vector2Int.h
         ${PROJECT_SOURCE_DIR}/src/physics_object/GravityObject.cpp
@@ -33,6 +38,14 @@ set(PHYSICSOBJECT_SOURCES
         ${PROJECT_SOURCE_DIR}/src/physics_object/ObjectData.h
         )
 
+set(PHYSICS_SOURCES
+        ${PROJECT_SOURCE_DIR}/src/Physics.cpp
+        ${PROJECT_SOURCE_DIR}/src/Physics.h
+
+        ${GRID_SOURCES}
+        ${PHYSICS_OBJECT_SOURCES}
+        )
+
 set(TIMEKEEPING_SOURCES
         ${PROJECT_SOURCE_DIR}/src/time_keeping/Timer.h
         ${PROJECT_SOURCE_DIR}/src/window/Color.h
@@ -41,7 +54,7 @@ set(TIMEKEEPING_SOURCES
 add_executable(SolarSystem
         src/solar_system_simulator.cpp
         ${WINDOW_SOURCES}
-        ${PHYSICSOBJECT_SOURCES}
+        ${PHYSICS_SOURCES}
         ${TIMEKEEPING_SOURCES}
         )
 

@@ -6,7 +6,6 @@
 
 namespace physics {
 
-#define PI 3.14159265358979323846
 
 void WallObject::onInitialize() {
     mass = 1e300;
@@ -54,9 +53,11 @@ Vector2 WallObject::project(const Vector2 &point, const Vector2 &lineStart,
 }
 
 void WallObject::draw() {
-    unsigned int n = 30;
-    for (unsigned int i = 0; i < n; i++) {
-        Vector2 p = acc + (temp-acc)*i*1.0/n;
+    Vector2 dir = (temp-acc);
+    double length = dir.length();
+    auto nCircles = static_cast<unsigned int>(2.0*length / radius);
+    for (unsigned int i = 0; i < nCircles; i++) {
+        Vector2 p = acc + dir*i*1.0/nCircles;
         Vector2Int drawPos = window::Window::toPixel(p);
         short drawR = window::Window::toPixel(radius);
 

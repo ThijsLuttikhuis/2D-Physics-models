@@ -32,7 +32,7 @@ void GravityObject::afterUpdate(const double &dt) {
 
 }
 
-void GravityObject::getAction(const PhysicsObject* body) {
+void GravityObject::getAction(const Physics* body) {
 
 }
 
